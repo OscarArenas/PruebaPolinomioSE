@@ -31,9 +31,9 @@ public class PruebaPolinomioSE {
         PolinomioSE polinomioSE = new PolinomioSE();
 
         polinomioSE.agregar(2, 3);
-        polinomioSE.agregar(7, 20);
+        polinomioSE.agregar(-7, 20);
         polinomioSE.agregar(-5.39, 2);
-        polinomioSE.agregar(1, 8);
+        polinomioSE.agregar(1, 18);
         polinomioSE.agregar(31, 8);
 
         System.out.println("Polinomio: " + polinomioSE);

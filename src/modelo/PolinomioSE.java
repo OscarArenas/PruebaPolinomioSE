@@ -22,56 +22,65 @@ package modelo;
  */
 public class PolinomioSE {
 
-    private Nodo primerTermino;
+    private Nodo primerNodo;
     private int n;
 
     public PolinomioSE() {
-        primerTermino = null;
+        primerNodo = null;
         n = 0;
     }
 
     public boolean agregar(double coeficiente, int exponente) {
-        if (coeficiente != 0 && exponente >= 0) {
-            Nodo actual = primerTermino;
-            Nodo anterior = null;
-
-            while (actual != null && exponente > actual.exponente) {
-                anterior = actual;
-                actual = actual.siguiente;
-            }
-            if (actual != null && exponente == actual.exponente) {
-                return false; // No se permiten exponentes repetidos
-            }
-            Nodo nuevoNodo = new Nodo(coeficiente, exponente, actual);
-
-            if (anterior == null) {
-                primerTermino = nuevoNodo;
-            } else {
-                anterior.siguiente = nuevoNodo;
-            }
-            n++;
-            return true;
+        if (coeficiente == 0 || exponente < 0) {
+            return false;
         }
-        return false;
+        Nodo actual = primerNodo;
+        Nodo anterior = null;
+
+        while (actual != null && actual.exponente > exponente) {
+            anterior = actual;
+            actual = actual.siguiente;
+        }
+        if (actual != null && exponente == actual.exponente) {
+            return false; // No se permiten exponentes repetidos
+        }
+        Nodo nuevoNodo = new Nodo(coeficiente, exponente, actual);
+
+        if (anterior == null) {
+            primerNodo = nuevoNodo;
+        } else {
+            anterior.siguiente = nuevoNodo;
+        }
+        n++;
+        return true;
+
     }
 
     public boolean eliminar(int exponente) {
-        Nodo actual = primerTermino;
+        Nodo actual = primerNodo;
         Nodo anterior = null;
 
         while (actual != null && exponente < actual.exponente) {
             anterior = actual;
-            actual = actual.getSiguiente();
+            actual = actual.siguiente;
         }
         if (actual != null && exponente == actual.exponente) {
             if (anterior == null) {
-                primerTermino = actual.siguiente;
+                primerNodo = actual.siguiente;
             } else {
                 anterior.siguiente = actual.siguiente;
             }
             n--;
             return true;
         }
+        return false;
+    }
+
+    public int cantidad() {
+        return n;
+    }
+
+    public boolean contiene(int exponente) {
         return false;
     }
 
@@ -85,24 +94,20 @@ public class PolinomioSE {
     @Override
     public String toString() {
         String cadena = "";
-        Nodo actual = primerTermino;
+        Nodo actual = primerNodo;
 
         while (actual != null) {
-            double coeficiente = actual.getCoeficiente();
-            int exponente = actual.getExponente();
-            String signo = "";
-
-            if (actual.getSiguiente() != null) {
-                if (coeficiente < 0) {
-                    signo = " - ";
+            if (actual != primerNodo) {
+                if (actual.coeficiente < 0) {
+                    cadena += " - ";
                 } else {
-                    signo = " + ";
+                    cadena += " + ";
                 }
-            } else if (coeficiente < 0) {
-                signo = "-";
+            } else if (actual.coeficiente < 0) {
+                cadena += "-";
             }
-            cadena = signo + convertirTermino(coeficiente, exponente) + cadena;
-            actual = actual.getSiguiente();
+            cadena += convertirTermino(actual.coeficiente, actual.exponente);
+            actual = actual.siguiente;
         }
         return cadena;
     }
@@ -126,10 +131,9 @@ public class PolinomioSE {
             if (coeficiente == 1) {
                 cadena = "";
             }
-            if (exponente == 1) {
-                cadena += "x";
-            } else {
-                cadena += "x^" + exponente;
+            cadena += "x";
+            if (exponente > 1) {
+                cadena += "^" + exponente;
             }
         }
         return cadena;
@@ -137,8 +141,10 @@ public class PolinomioSE {
 
     private class Nodo {
 
+        // Término
         double coeficiente;
         int exponente;
+        // Enlace
         Nodo siguiente;
 
         public Nodo(double coeficiente, int exponente, Nodo siguiente) {
