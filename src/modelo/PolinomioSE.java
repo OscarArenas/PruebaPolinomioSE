@@ -61,7 +61,7 @@ public class PolinomioSE {
 
         while (actual != null && exponente < actual.exponente) {
             anterior = actual;
-            actual = actual.getSiguiente();
+            actual = actual.siguiente;
         }
         if (actual != null && exponente == actual.exponente) {
             if (anterior == null) {
@@ -88,11 +88,11 @@ public class PolinomioSE {
         Nodo actual = primerTermino;
 
         while (actual != null) {
-            double coeficiente = actual.getCoeficiente();
-            int exponente = actual.getExponente();
+            double coeficiente = actual.coeficiente;
+            int exponente = actual.exponente;
             String signo = "";
 
-            if (actual.getSiguiente() != null) {
+            if (actual.siguiente!= null) {
                 if (coeficiente < 0) {
                     signo = " - ";
                 } else {
@@ -102,7 +102,7 @@ public class PolinomioSE {
                 signo = "-";
             }
             cadena = signo + convertirTermino(coeficiente, exponente) + cadena;
-            actual = actual.getSiguiente();
+            actual = actual.siguiente;
         }
         return cadena;
     }
@@ -137,8 +137,10 @@ public class PolinomioSE {
 
     private class Nodo {
 
+        // Término
         double coeficiente;
         int exponente;
+        // Enlace
         Nodo siguiente;
 
         public Nodo(double coeficiente, int exponente, Nodo siguiente) {
