@@ -104,7 +104,7 @@ public class PolinomioSE {
                     cadena += " + ";
                 }
             } else if (actual.coeficiente < 0) {
-                cadena += "-";
+                cadena = "-";
             }
             cadena += convertirTermino(actual.coeficiente, actual.exponente);
             actual = actual.siguiente;
@@ -137,6 +137,7 @@ public class PolinomioSE {
             }
         }
         return cadena;
+
     }
 
     private class Nodo {
